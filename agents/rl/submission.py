@@ -8,7 +8,7 @@ import numpy as np
 
 
 # TODO: CUDA 테스트 해볼것
-device = 'cpu'
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 class Actor(nn.Module):
     def __init__(self, state_space, action_space, hidden_size=64, cnn=False):
@@ -46,7 +46,7 @@ class RLAgent(object):
         self.obs_dim = obs_dim
         self.act_dim = act_dim
         self.num_agent = num_agent
-        self.device = 'cpu'
+        self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         self.actor = Actor(self.obs_dim, self.act_dim).to(self.device)
 
     def choose_action(self, obs):

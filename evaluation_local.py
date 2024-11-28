@@ -106,6 +106,11 @@ def run_game(env, algo_list, episode, shuffle_map, map_num, verbose=False):
 
 
 if __name__ == "__main__":
+    if torch.cuda.is_available():
+        print("CUDA 사용 가능")
+    else:
+        print("CUDA 사용 불가능")
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--my_ai", default='rl', help='rl/random')
     parser.add_argument("--opponent", default='random', help='rl/random')
