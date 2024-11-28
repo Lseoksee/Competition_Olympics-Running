@@ -7,6 +7,7 @@ from torch.distributions import Categorical
 import numpy as np
 
 
+# TODO: CUDA 테스트 해볼것
 device = 'cpu'
 
 class Actor(nn.Module):

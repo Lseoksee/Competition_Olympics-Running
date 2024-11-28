@@ -1,6 +1,6 @@
 import sys
 from os import path
-father_path = path.dirname(__file__)
+father_path = path.dirname("./olympics")
 sys.path.append(str(father_path))
 from generator import create_scenario
 import argparse

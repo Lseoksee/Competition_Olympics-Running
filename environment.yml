@@ -1,0 +1,29 @@
+name: .conda
+channels:
+  - defaults
+  - pytorch
+  - nvidia
+dependencies:
+  - pip=24.2
+  - python=3.10
+  - pytorch=2.3.1
+  - torchvision=0.18.1
+  - torchaudio=2.3.1
+  - pytorch-cuda=12.1
+  - pip:
+      - certifi
+      - cycler
+      - kiwisolver
+      - matplotlib
+      - numpy
+      - Pillow
+      - pygame
+      - pyparsing
+      - python-dateutil
+      - six
+      - wincertstore
+      - pyyaml
+      - tensorboard
+      - gym
+      - tabulate
+prefix: .conda
