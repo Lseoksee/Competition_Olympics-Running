@@ -1,14 +1,16 @@
-name: .conda
+name: competition
 channels:
-  - defaults
+  - nvidia
   - pytorch
+  - defaults
 dependencies:
   - pip=24.2
   - python=3.10.14
-  - pytorch=2.3.1
-  - matplotlib=3.9.2
+  - pytorch-cuda=12.1
   - torchvision=0.18.1
   - torchaudio=2.3.1
+  - pytorch=2.3.1
+  - matplotlib=3.9.2
   - pip:
       - certifi
       - cycler
@@ -23,4 +25,4 @@ dependencies:
       - tensorboard
       - gym
       - tabulate
-prefix: .conda
+prefix: competition
