@@ -43,10 +43,12 @@ def get_join_actions(state, algo_list):
 
 RENDER = True
 
-def run_game(env, algo_list, episode, shuffle_map,map_num, verbose=False):
+def run_game(env, algo_list, episode, shuffle_map, map_num, verbose=False):
     total_reward = np.zeros(2)
     num_win = np.zeros(3)       #agent 1 win, agent 2 win, draw
+    total_steps = []            # 각 에피소드의 step 수 저장
     episode = int(episode)
+    
     for i in range(1, int(episode)+1):
         episode_reward = np.zeros(2)
 
@@ -64,12 +66,16 @@ def run_game(env, algo_list, episode, shuffle_map,map_num, verbose=False):
             if RENDER:
                 env.env_core.render()
 
+            step += 1  # step 증가
+
             if done:
                 if reward[0] != reward[1]:
-                    if reward[0]==100:
-                        num_win[0] +=1
+                    if reward[0] == 100:
+                        num_win[0] += 1
                     elif reward[1] == 100:
                         num_win[1] += 1
+                        total_steps.append(step)  # 이긴 경우 에피소드별 step 수 저장
+                        print(step)                        
                     else:
                         raise NotImplementedError
                 else:
@@ -77,20 +83,23 @@ def run_game(env, algo_list, episode, shuffle_map,map_num, verbose=False):
 
                 if not verbose:
                     print('.', end='')
-                    if i % 100 == 0 or i==episode:
+                    if i % 100 == 0 or i == episode:
                         print()
                 break
             state = next_state
-            step += 1
+        
         total_reward += episode_reward
-    total_reward/=episode
+
+    # 결과 출력
+    total_reward /= episode
+    average_steps = np.mean(total_steps)  # 평균 step 수 계산
     print("total reward: ", total_reward)
     print('Result in map {} within {} episode:'.format(map_num, episode))
-    #print(f'\nResult in base on {episode} in map {map_num} ', end='')
-
+    
     header = ['Name', algo_list[0], algo_list[1]]
     data = [['score', np.round(total_reward[0], 2), np.round(total_reward[1], 2)],
-            ['win', num_win[0], num_win[1]]]
+            ['win', num_win[0], num_win[1]],
+            ['avg_steps', average_steps, '-']]  # 평균 step 추가
     print(tabulate(data, headers=header, tablefmt='pretty'))
 
 
