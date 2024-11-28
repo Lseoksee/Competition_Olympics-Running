@@ -29,7 +29,7 @@ class Args:
     state_space = 625
 
 args = Args()
-device = 'cpu'
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 class PPO:
     clip_param = args.clip_param

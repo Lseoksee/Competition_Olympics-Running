@@ -12,7 +12,7 @@
             "args": [
                 "--my_ai", "rl",
                 "--opponent", "random",
-                "--episode", "1",
+                "--episode", "50",
                 "--map", "all"
             ],
             "console": "integratedTerminal"

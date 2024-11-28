@@ -47,6 +47,7 @@ class RLAgent(object):
         self.act_dim = act_dim
         self.num_agent = num_agent
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        print("디바이스", self.device)
         self.actor = Actor(self.obs_dim, self.act_dim).to(self.device)
 
     def choose_action(self, obs):

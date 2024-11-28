@@ -21,7 +21,7 @@ class CNN_encoder(nn.Module):
         x = self.net(view_state)
         return x
 
-device = 'cpu'
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 class Actor(nn.Module):
     def __init__(self, state_space, action_space, hidden_size=64, cnn=False):
