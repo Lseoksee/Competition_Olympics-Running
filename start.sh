@@ -1,0 +1,1 @@
+conda activate ./.conda && python evaluation_local.py --my_ai rl --opponent random --episode=50 --map=all

@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "donjayamanne.python-extension-pack",
+        "ms-toolsai.jupyter",
+        "ms-python.isort",
+        "ms-python.black-formatter"
+    ]
+}
