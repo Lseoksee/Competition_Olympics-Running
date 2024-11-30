@@ -1,4 +1,4 @@
-name: competition
+name: competition_cuda
 channels:
   - nvidia
   - pytorch
@@ -25,4 +25,4 @@ dependencies:
       - tensorboard
       - gym
       - tabulate
-prefix: competition
+prefix: competition_cuda

@@ -15,7 +15,7 @@
                 "--episode", "100",
                 "--map", "6",
                 "--gui", "true",
-                "--repeat", "100"
+                "--repeat", "0"
             ],
             "console": "integratedTerminal"
         }

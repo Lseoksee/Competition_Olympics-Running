@@ -38,9 +38,8 @@ class Critic(nn.Module):
         value = self.state_value(x)
         return value
 
-
+#INFO: 이건 사용 안됨
 actions_map = actions_map = {key: [0, 10 * key] for key in range(36)}
-
 
 class RLAgent(object):
     def __init__(self, obs_dim, act_dim, num_agent):
@@ -68,11 +67,11 @@ agent = RLAgent(25 * 25, 36, 1)
 actor_net = os.path.dirname(os.path.abspath(__file__)) + "/actor_1500.pth"
 agent.load_model(actor_net)
 
-
+#INFO: 이건 사용 안됨
 def my_controller(observation_list, action_space_list, is_act_continuous):
     obs_dim = 25 * 25
     obs = observation_list["obs"].copy().flatten()
     actions_raw = agent.choose_action(obs)
-    actions = actions_map[actions_raw]
+    actions = actions_map[actions_raw] # type: ignore
     wrapped_actions = [[actions[0]], [actions[1]]]
     return wrapped_actions

@@ -12,6 +12,7 @@ import os
 from datetime import datetime
 
 from env.olympics_running import OlympicsRunning
+from utils.utills import Log
 
 
 # TODO: 전략 값 여기가 핵심 (힘: 각도)
@@ -116,7 +117,7 @@ def run_game(
                     elif reward[1] == 100:
                         num_win[1] += 1
                         total_steps.append(step)  # 이긴 경우 에피소드별 step 수 저장
-                        print(f"{map_index}번 맵에서 {step}번 스탭만에 승리")
+                        Log(f"{map_index}번 맵에서 {step}번 스탭만에 승리")
                     else:
                         raise NotImplementedError
                 else:
@@ -133,8 +134,8 @@ def run_game(
     # 결과 출력
     total_reward /= episode
     average_steps = np.mean(total_steps)  # 평균 step 수 계산
-    print("total reward: ", total_reward)
-    print("Result in map {} within {} episode:".format(map_num, episode))
+    Log("total reward: ", total_reward)
+    Log(f"Result in map {map_num} within {episode} episode:")
 
     header = ["Name", algo_list[0], algo_list[1]]
     data = [
@@ -159,10 +160,10 @@ if __name__ == "__main__":
     parser.add_argument("--episode", default=20)
     parser.add_argument("--map", default="all", help="1/2/3/4/all")
     parser.add_argument("--gui", required=True, help="pygame gui 사용 여부")
-    parser.add_argument("--repeat", default=1, help="반복 횟수")
+    parser.add_argument("--repeat", default=0, help="반복 횟수 (무한=0)")
     args = parser.parse_args()
 
-    if DEVICE == 'cuda' and is_available_cuda:
+    if DEVICE == "cuda" and is_available_cuda:
         print("디바이스: CUDA")
     else:
         print("디바이스: CPU")
@@ -176,12 +177,8 @@ if __name__ == "__main__":
     else:
         shuffle = True
 
-    # torch.manual_seed(1)
-    # np.random.seed(1)
-    # random.seed(1)
+    agent_list = [args.opponent, args.my_ai]  # your are cojntrolling agent green
 
-    agent_list = [args.opponent, args.my_ai]  # your are controlling agent green
-    
     render_gui = True if args.gui == "true" else False
 
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -189,8 +186,13 @@ if __name__ == "__main__":
     print(now.center(40, "="))
     print()
 
-    for i in range(1, int(args.repeat) + 1):
-        print(f"{i}번째 시도")
+    repeat = int(args.repeat)
+    i = 1
+    while True:
+        # 0으로 설정되있으면 무한 반복
+        if repeat != 0 and ((repeat + 1) <= i):
+            break
+        Log(f"{i}번째 시도")
         print()
         run_game(
             game,
@@ -202,3 +204,4 @@ if __name__ == "__main__":
             verbose=False,
         )
         print()
+        i += 1

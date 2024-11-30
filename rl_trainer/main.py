@@ -1,3 +1,5 @@
+import sys
+sys.path.append("./rl_trainer")
 import argparse
 import datetime
 
@@ -6,12 +8,8 @@ import torch
 import numpy as np
 
 from pathlib import Path
-import sys
 
 from constants import DEVICE
-
-base_dir = str(Path(__file__).resolve().parent.parent)
-sys.path.append(base_dir)
 
 
 from collections import deque, namedtuple

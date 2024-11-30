@@ -1,4 +1,4 @@
-name: competition
+name: competition_noncuda
 channels:
   - defaults
   - pytorch
@@ -23,4 +23,4 @@ dependencies:
       - tensorboard
       - gym
       - tabulate
-prefix: competition
+prefix: competition_noncuda
