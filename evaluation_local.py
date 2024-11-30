@@ -67,6 +67,7 @@ def get_join_actions(state, algo_list):
             joint_actions.append([[driving_force], [turing_angle]])
 
         elif algo_list[agent_idx] == "rl":
+            #INFO: 이게 아마 환경 데이터
             obs = state[agent_idx]["obs"].flatten()
             actions_raw = int(rl_agent.choose_action(obs))
             actions = actions_map[actions_raw]
@@ -99,7 +100,9 @@ def run_game(
         step = 0
 
         while True:
+            #메 스탭 지날때 마다 환경에서 상태 정보 갱신
             joint_action = get_join_actions(state, algo_list)
+            # 상태에 따른 행동 선택
             next_state, reward, done, _, info = env.step(joint_action)
             reward = np.array(reward)
             episode_reward += reward

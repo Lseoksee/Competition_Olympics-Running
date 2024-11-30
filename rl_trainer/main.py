@@ -1,5 +1,7 @@
+from os import path
 import sys
-sys.path.append("./rl_trainer")
+father_path = path.dirname("./olympics")
+sys.path.append(str(father_path))
 import argparse
 import datetime
 
@@ -13,7 +15,6 @@ from constants import DEVICE
 
 
 from collections import deque, namedtuple
-
 
 from env.chooseenv import make
 from rl_trainer.log_path import *
@@ -147,7 +148,7 @@ def main(args):
     train_count = 0
 
     while episode < args.max_episodes:
-        state = env.reset(
+        state, _ = env.reset(
             args.shuffle_map
         )  # [{'obs':[25,25], "control_player_index": 0}, {'obs':[25,25], "control_player_index": 1}]
         if RENDER:

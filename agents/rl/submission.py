@@ -52,6 +52,9 @@ class RLAgent(object):
         self.actor = Actor(self.obs_dim, self.act_dim).to(self.device)
 
     def choose_action(self, obs):
+        """
+        obs가 환경데이터 인데 해당 환경데이터를 2차원으로 직렬화 한다음에 최대값 뽑아주는거인듯
+        """
         state = torch.from_numpy(obs).float().unsqueeze(0).to(self.device)
         with torch.no_grad():
             action_prob = self.actor(state).to(self.device)
