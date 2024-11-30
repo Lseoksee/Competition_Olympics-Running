@@ -181,6 +181,8 @@ if __name__ == "__main__":
     # random.seed(1)
 
     agent_list = [args.opponent, args.my_ai]  # your are controlling agent green
+    
+    render_gui = True if args.gui == "true" else False
 
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     print()
@@ -196,6 +198,6 @@ if __name__ == "__main__":
             episode=args.episode,
             shuffle_map=shuffle,
             map_num=args.map,
-            render_gui=args.gui,
+            render_gui=render_gui,
             verbose=False,
         )

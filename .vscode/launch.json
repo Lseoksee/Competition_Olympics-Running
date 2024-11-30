@@ -14,8 +14,8 @@
                 "--opponent", "random",
                 "--episode", "100",
                 "--map", "6",
-                "--gui", "True",
-                "--repeat", "100",
+                "--gui", "true",
+                "--repeat", "100"
             ],
             "console": "integratedTerminal"
         }
