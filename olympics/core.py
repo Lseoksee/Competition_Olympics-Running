@@ -172,7 +172,7 @@ class OlympicsBase(object):
         self.merge_map()
 
         self.view_setting = map["view"]
-        self.map_num = None
+        self.map_num: int | None = None
         #self.is_render = True
         self.display_mode = False
 

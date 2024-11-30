@@ -105,7 +105,7 @@ class OlympicsRunning(Game):
         self.current_state = self.env_core.get_obs()        #[2,100,100] list
         self.all_observes = self.get_all_observes()         #wrapped obs with player index
 
-        return self.all_observes
+        return self.all_observes, self.env_core.map_num
 
     def step(self, joint_action):
         #joint_action: should be [  [[0,0,1], [0,1,0]], [[1,0,0], [0,0,1]]  ] or [[array(), array()], [array(), array()]]
