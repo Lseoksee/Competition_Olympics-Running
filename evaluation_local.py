@@ -142,7 +142,11 @@ if __name__ == "__main__":
     parser.add_argument("--opponent", default="random", help="rl/random")
     parser.add_argument("--episode", default=20)
     parser.add_argument("--map", default="all", help="1/2/3/4/all")
+    
+    #INFO: constants.py 파일에 정의되어 있음
     parser.add_argument("--strategy", help="행동 전략")
+    
+    #INFO: constants.py 파일에 정의되어 있음
     parser.add_argument(
         "--diff-strategy", help="맵별 행동 전략 다르게 설정", action="store_true"
     )
