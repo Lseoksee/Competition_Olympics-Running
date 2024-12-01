@@ -45,4 +45,4 @@ conda activate competition_cuda
 CMD git pull; \
 source ~/miniconda3/etc/profile.d/conda.sh; \
 conda activate competition_cuda; \
-python evaluation_local.py $python_args
+python -u evaluation_local.py $python_args
