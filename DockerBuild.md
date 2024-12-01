@@ -2,5 +2,5 @@
 
 ```bash
 docker buildx build --load -t competition .
-docker compose up
+docker compose -p competition up -d
 ```
