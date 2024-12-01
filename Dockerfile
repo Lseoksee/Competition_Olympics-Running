@@ -41,5 +41,8 @@ RUN conda env create -f environment.yml && \
 source ~/miniconda3/etc/profile.d/conda.sh && \
 conda activate competition_cuda
 
+# python docker logs 출력대응
+ENV PYTHONUNBUFFERED 1
+
 # 컨테이너 시작시 start.sh 파일 실행
 CMD ["/bin/bash", "start.sh"]

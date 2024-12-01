@@ -10,7 +10,6 @@ services:
                           count: all
                           capabilities: [gpu]
         environment:
-            - PYTHONUNBUFFERED=1
             - python_args=--my_ai rl --opponent random --episode=100 --map=all --gui false --repeat 0 --strategy default
         image: competition
 
@@ -25,6 +24,5 @@ services:
                           count: all
                           capabilities: [gpu]
         environment:
-            - PYTHONUNBUFFERED=1
             - python_args=--my_ai rl --opponent random --episode=100 --map=all --gui false --repeat 0 --diff-strategy
         image: competition
