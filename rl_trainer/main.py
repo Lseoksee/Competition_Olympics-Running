@@ -163,7 +163,7 @@ def main(args):
                 env.specify_a_map(rotate_map)
             else:
                 env.specify_a_map(
-                    args.map
+                    int(args.map)
                 )  # specifying a map, you can also shuffle the map by not doing this step
 
         while episode < args.max_episodes:
@@ -288,5 +288,20 @@ def main(args):
 
 
 if __name__ == "__main__":
+    # CUDA 체크
+    is_available_cuda = False
+    if torch.cuda.is_available():
+        is_available_cuda = True
+        print("CUDA 사용 가능")
+    else:
+        print("CUDA 사용 불가능")
+        
+    if DEVICE == "cuda" and is_available_cuda:
+        print("디바이스: CUDA")
+    else:
+        print("디바이스: CPU")
+    
+    print()
+
     args = parser.parse_args()
     main(args)
