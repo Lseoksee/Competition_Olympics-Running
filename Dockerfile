@@ -43,6 +43,6 @@ conda activate competition_cuda
 
 # 컨테이너 시작 스크립트
 CMD git pull; \
-source ~/miniconda3/etc/profile.d/conda.sh \
-conda activate competition_cuda \
+source ~/miniconda3/etc/profile.d/conda.sh; \
+conda activate competition_cuda; \
 python evaluation_local.py $python_args
