@@ -34,7 +34,7 @@ RUN conda init && source ~/.bashrc
 
 # Competition_Olympics-Running clone
 RUN git clone https://github.com/Lseoksee/Competition_Olympics-Running.git
-WORKDIR "/root/IDM-VTON-FastAPI"
+WORKDIR "/root/Competition_Olympics-Running"
 
 # conda 가상환경 만들고 활성화
 RUN conda env create -f environment.yml && \
