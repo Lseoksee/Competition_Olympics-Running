@@ -98,7 +98,9 @@ def run_game(
                     elif reward[1] == 100:
                         num_win[1] += 1
                         total_steps.append(step)  # 이긴 경우 에피소드별 step 수 저장
-                        Log(f"{map_index}번 맵에서 {step}번 스탭만에 승리, 남은 에피소드: {episode-i}")
+                        Log(
+                            f"{map_index}번 맵에서 {step}번 스탭만에 승리, 남은 에피소드: {episode-i}"
+                        )
                     else:
                         raise NotImplementedError
                 else:
@@ -142,11 +144,11 @@ if __name__ == "__main__":
     parser.add_argument("--opponent", default="random", help="rl/random")
     parser.add_argument("--episode", default=20)
     parser.add_argument("--map", default="all", help="1/2/3/4/all")
-    
-    #INFO: constants.py 파일에 정의되어 있음
+
+    # INFO: constants.py 파일에 정의되어 있음
     parser.add_argument("--strategy", help="행동 전략")
-    
-    #INFO: constants.py 파일에 정의되어 있음
+
+    # INFO: constants.py 파일에 정의되어 있음
     parser.add_argument(
         "--diff-strategy", help="맵별 행동 전략 다르게 설정", action="store_true"
     )
@@ -204,11 +206,14 @@ if __name__ == "__main__":
         )
 
         #  최고 기록 구하기 (승리 횟수가 가장 많고 같을 경우 평균 step이 작은 것을 선택)
-        if conut >= max_repeat["count"]:
-            if not max_repeat["avg"] or avg < max_repeat["avg"]:
-                max_repeat["repeat"] = i
-                max_repeat["count"] = conut
-                max_repeat["avg"] = avg
+        if conut > max_repeat["count"]:
+            max_repeat["repeat"] = i
+            max_repeat["count"] = conut
+            max_repeat["avg"] = avg
+        elif conut == max_repeat["count"] and avg < max_repeat["avg"]:
+            max_repeat["repeat"] = i
+            max_repeat["count"] = conut
+            max_repeat["avg"] = avg
 
         print(
             "현재 최고기록: {}번째 시도, 승리 횟수: {}, 평균step: {}".format(

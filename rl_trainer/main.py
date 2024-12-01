@@ -42,11 +42,18 @@ parser.add_argument("--seed", default=1, type=int)
 parser.add_argument("--save_interval", default=100, type=int)
 parser.add_argument("--model_episode", default=0, type=int)
 
-parser.add_argument("--load_model", action="store_true")  # 加是true；不加为false
+parser.add_argument("--load_model", action="store_true")
+parser.add_argument(
+    "--actor_path", help="actor 모델 경로: run4/trained_model/actor_1500.pth"
+)
+parser.add_argument(
+    "--critic_path", help="critic 모델 경로: run4/trained_model/actor_1500.pth"
+)
+
 parser.add_argument("--load_run", default=2, type=int)
 parser.add_argument("--load_episode", default=900, type=int)
 
-#GUI 사용 여부
+# GUI 사용 여부
 parser.add_argument("--gui", required=True, help="pygame gui 사용 여부")
 
 device = "cuda" if torch.cuda.is_available() and DEVICE == "cuda" else "cpu"
@@ -115,6 +122,7 @@ def main(args):
     obs_dim = 25 * 25
     print(f"action dimension: {act_dim}")
     print(f"observation dimension: {obs_dim}")
+    print("훈련 사용 여부: ", args.train)
 
     torch.manual_seed(args.seed)
     # 定义保存路径
@@ -137,10 +145,14 @@ def main(args):
 
     if args.load_model:
         model = PPO()
-        load_dir = os.path.join(os.path.dirname(run_dir), "run" + str(args.load_run))
-        model.load(load_dir, episode=args.load_episode)
+        model.load(
+            actor_path=args.actor_path,
+            critic_path=args.critic_path,
+        )
     else:
         model = PPO(run_dir)
+
+    if args.train:
         Transition = namedtuple(
             "Transition",
             ["state", "action", "a_log_prob", "reward", "next_state", "done"],
@@ -154,7 +166,7 @@ def main(args):
     while True:
         episode = 0
         train_count = 0
-        
+
         if not args.shuffle_map:
             if args.map == "all":
                 print()
@@ -295,12 +307,12 @@ if __name__ == "__main__":
         print("CUDA 사용 가능")
     else:
         print("CUDA 사용 불가능")
-        
+
     if DEVICE == "cuda" and is_available_cuda:
         print("디바이스: CUDA")
     else:
         print("디바이스: CPU")
-    
+
     print()
 
     args = parser.parse_args()

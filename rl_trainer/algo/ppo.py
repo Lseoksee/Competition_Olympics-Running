@@ -1,3 +1,4 @@
+from ast import Raise
 from itertools import count
 import os, time
 import torch
@@ -193,36 +194,51 @@ class PPO:
             os.makedirs(base_path)
 
         if temp_save:
-            model_actor_path = os.path.join(base_path, f"(temp) actor_map-{map}_ep-{episode}.pth")
-            model_critic_path = os.path.join(base_path, f"(temp) critic_map-{map}_ep-{episode}.pth")
+            model_actor_path = os.path.join(
+                base_path, f"(temp) actor_map-{map}_ep-{episode}.pth"
+            )
+            model_critic_path = os.path.join(
+                base_path, f"(temp) critic_map-{map}_ep-{episode}.pth"
+            )
         else:
             if map == "all":
-                model_actor_path = os.path.join(base_path, f"actor_{episode}_allmap.pth")
-                model_critic_path = os.path.join(base_path, f"critic_{episode}_allmap.pth")
+                model_actor_path = os.path.join(
+                    base_path, f"actor_{episode}_allmap.pth"
+                )
+                model_critic_path = os.path.join(
+                    base_path, f"critic_{episode}_allmap.pth"
+                )
             else:
-                model_actor_path = os.path.join(base_path, f"actor_{episode}_map-{map}_only.pth")
-                model_critic_path = os.path.join(base_path, f"critic_{episode}_map-{map}_only.pth")
+                model_actor_path = os.path.join(
+                    base_path, f"actor_{episode}_map-{map}_only.pth"
+                )
+                model_critic_path = os.path.join(
+                    base_path, f"critic_{episode}_map-{map}_only.pth"
+                )
         torch.save(self.actor_net.state_dict(), model_actor_path)
         torch.save(self.critic_net.state_dict(), model_critic_path)
 
-    def load(self, run_dir, episode):
-        print(f"\nBegin to load model: ")
-        print("run_dir: ", run_dir)
-        base_path = os.path.dirname(os.path.dirname(__file__))
-        print("base_path: ", base_path)
-        algo_path = os.path.join(base_path, "models/ppo")
-        run_path = os.path.join(algo_path, run_dir)
-        run_path = os.path.join(run_path, "trained_model")
-        model_actor_path = os.path.join(run_path, "actor_" + str(episode) + ".pth")
-        model_critic_path = os.path.join(run_path, "critic_" + str(episode) + ".pth")
-        print(f"Actor path: {model_actor_path}")
-        print(f"Critic path: {model_critic_path}")
+    def load(self, actor_path, critic_path):
+        if not (actor_path or critic_path):
+            raise Exception(
+                "--actor_path 또는 --critic_path 인자가 필요합니다. 아니면 --load_model 인자를 빼주세요."
+            )
+
+        base_path = os.path.join(
+            os.getcwd(), "rl_trainer", "models", "olympics-running"
+        )
+
+        model_actor_path = os.path.join(base_path, actor_path)
+        model_critic_path = os.path.join(base_path, critic_path)
 
         if os.path.exists(model_critic_path) and os.path.exists(model_actor_path):
             actor = torch.load(model_actor_path, map_location=device)
-            critic = torch.load(model_critic_path, map_location=device)
             self.actor_net.load_state_dict(actor)
+            print(f"Actor 모델 체크포인트 로드: {model_actor_path}")
+
+            critic = torch.load(model_critic_path, map_location=device)
             self.critic_net.load_state_dict(critic)
-            print("Model loaded!")
+            print(f"Critic 모델 체크포인트 로드: {model_critic_path}")
+
         else:
-            sys.exit(f"Model not founded!")
+            raise Exception("actor_path 또는 critic_path 경로에 파일이 없습니다.")
