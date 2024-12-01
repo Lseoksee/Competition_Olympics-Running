@@ -9,6 +9,5 @@ if [ -z "$python_args" ]; then
     python evaluation_local.py --my_ai rl --opponent random --episode=100 --map=all --gui false --repeat 0 --diff-strategy
 else
     #python_args 환경변수가 있는경우
-    nohup python evaluation_local.py $python_args &
-    tail -f nohup.out
+    python evaluation_local.py $python_args
 fi
