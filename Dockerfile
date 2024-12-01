@@ -41,7 +41,7 @@ RUN conda env create -f environment.yml && \
 source ~/miniconda3/etc/profile.d/conda.sh && \
 conda activate competition_cuda
 
-# 컨테이너 시작시 start.sh 파일 실행
+# 컨테이너 시작 스크립트
 CMD git pull; \
 source ~/miniconda3/etc/profile.d/conda.sh \
 conda activate competition_cuda \
