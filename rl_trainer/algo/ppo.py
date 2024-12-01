@@ -181,14 +181,28 @@ class PPO:
     def clear_buffer(self):
         del self.buffer[:]
 
-    def save(self, save_path, episode):
+    def save(
+        self,
+        save_path,
+        episode,
+        map,
+        temp_save=False,
+    ):
         base_path = os.path.join(save_path, "trained_model")
         if not os.path.exists(base_path):
             os.makedirs(base_path)
 
-        model_actor_path = os.path.join(base_path, "actor_" + str(episode) + ".pth")
+        if temp_save:
+            model_actor_path = os.path.join(base_path, f"(temp) actor_map-{map}_ep-{episode}.pth")
+            model_critic_path = os.path.join(base_path, f"(temp) critic_map-{map}_ep-{episode}.pth")
+        else:
+            if map == "all":
+                model_actor_path = os.path.join(base_path, f"actor_{episode}_allmap.pth")
+                model_critic_path = os.path.join(base_path, f"critic_{episode}_allmap.pth")
+            else:
+                model_actor_path = os.path.join(base_path, f"actor_{episode}_map-{map}_only.pth")
+                model_critic_path = os.path.join(base_path, f"critic_{episode}_map-{map}_only.pth")
         torch.save(self.actor_net.state_dict(), model_actor_path)
-        model_critic_path = os.path.join(base_path, "critic_" + str(episode) + ".pth")
         torch.save(self.critic_net.state_dict(), model_critic_path)
 
     def load(self, run_dir, episode):

@@ -98,7 +98,7 @@ def run_game(
                     elif reward[1] == 100:
                         num_win[1] += 1
                         total_steps.append(step)  # 이긴 경우 에피소드별 step 수 저장
-                        Log(f"{map_index}번 맵에서 {step}번 스탭만에 승리")
+                        Log(f"{map_index}번 맵에서 {step}번 스탭만에 승리, 남은 에피소드: {episode-i}")
                     else:
                         raise NotImplementedError
                 else:
