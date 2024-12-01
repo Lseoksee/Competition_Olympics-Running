@@ -2,7 +2,7 @@
 git pull
 
 source ~/miniconda3/etc/profile.d/conda.sh
-conda activate -n competition_cuda
+conda activate competition_cuda
 
 if [ -z "$python_args" ]; then
     #python_args 환경변수가 비어있는 경우
