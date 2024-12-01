@@ -1,0 +1,28 @@
+services:
+    strategy-default:
+        container_name: st-default
+        #gpu 사용
+        deploy:
+            resources:
+                reservations:
+                    devices:
+                        - driver: nvidia
+                          count: all
+                          capabilities: [gpu]
+        environment:
+            - python_args=--my_ai rl --opponent random --episode=100 --map=all --gui false --repeat 0 --strategy default
+        image: competition
+
+    strategy-diffmap:
+        container_name: st-diffmap
+        #gpu 사용
+        deploy:
+            resources:
+                reservations:
+                    devices:
+                        - driver: nvidia
+                          count: all
+                          capabilities: [gpu]
+        environment:
+            - python_args=--my_ai rl --opponent random --episode=100 --map=all --gui false --repeat 0 --diff-strategy
+        image: competition
