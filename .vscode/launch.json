@@ -13,9 +13,10 @@
                 "--my_ai", "rl",
                 "--opponent", "random",
                 "--episode", "100",
-                "--map", "6",
+                "--map", "all",
                 "--gui", "true",
-                "--repeat", "0"
+                "--repeat", "0",
+                "--diff-strategy"
             ],
             "console": "integratedTerminal"
         }

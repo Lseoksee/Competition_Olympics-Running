@@ -3,7 +3,7 @@ import numpy as np
 import torch
 import random
 from agents.rl.submission import agent as rl_agent
-from constants import DEVICE
+from constants import DEVICE, MAP_STRATEGY, STRATEGY
 from env.chooseenv import make
 from tabulate import tabulate
 import argparse
@@ -15,49 +15,7 @@ from env.olympics_running import OlympicsRunning
 from utils.utills import Log
 
 
-# TODO: 전략 값 여기가 핵심 (힘: 각도)
-actions_map = {
-    0: [-100, -30],
-    1: [-100, -18],
-    2: [-100, -6],
-    3: [-100, 6],
-    4: [-100, 18],
-    5: [-100, 30],
-    6: [-40, -30],
-    7: [-40, -18],
-    8: [-40, -6],
-    9: [-40, 6],
-    10: [-40, 18],
-    11: [-40, 30],
-    12: [20, -30],
-    13: [20, -18],
-    14: [20, -6],
-    15: [20, 6],
-    16: [20, 18],
-    17: [20, 30],
-    18: [80, -30],
-    19: [80, -18],
-    20: [80, -6],
-    21: [80, 6],
-    22: [80, 18],
-    23: [80, 30],
-    24: [140, -30],
-    25: [140, -18],
-    26: [140, -6],
-    27: [140, 6],
-    28: [140, 18],
-    29: [140, 30],
-    30: [200, -30],
-    31: [200, -18],
-    32: [200, -6],
-    33: [200, 6],
-    34: [200, 18],
-    35: [200, 30],
-}  # dicretise action space
-
-
-def get_join_actions(state, algo_list):
-
+def get_join_actions(state, algo_list, strategy_list: dict[int, list[int]]):
     joint_actions = []
 
     for agent_idx in range(len(algo_list)):
@@ -67,10 +25,10 @@ def get_join_actions(state, algo_list):
             joint_actions.append([[driving_force], [turing_angle]])
 
         elif algo_list[agent_idx] == "rl":
-            #INFO: 이게 아마 환경 데이터
+            # INFO: 이게 아마 환경 데이터
             obs = state[agent_idx]["obs"].flatten()
             actions_raw = int(rl_agent.choose_action(obs))
-            actions = actions_map[actions_raw]
+            actions = strategy_list[actions_raw]
             joint_actions.append([[actions[0]], [actions[1]]])
 
     return joint_actions
@@ -82,6 +40,8 @@ def run_game(
     episode,
     shuffle_map,
     map_num,
+    strategy: str,
+    diff_strategy: bool,
     render_gui: bool,
     verbose=False,
 ):
@@ -94,14 +54,25 @@ def run_game(
         episode_reward = np.zeros(2)
 
         state, map_index = env.reset(shuffle_map)
+
+        if strategy:
+            map_strategy = STRATEGY[strategy]
+        elif diff_strategy:
+            Log(f"{map_index}번 맵전략: {MAP_STRATEGY[map_index]}")  # type: ignore
+            map_strategy = STRATEGY[MAP_STRATEGY[map_index]]  # type: ignore
+        else:
+            raise Exception(
+                "--diff-strategy값 또는 --strategy값을 실행 인자로 넣어주세요"
+            )
+
         if render_gui:
             env.env_core.render()
 
         step = 0
 
         while True:
-            #메 스탭 지날때 마다 환경에서 상태 정보 갱신
-            joint_action = get_join_actions(state, algo_list)
+            # 메 스탭 지날때 마다 환경에서 상태 정보 갱신
+            joint_action = get_join_actions(state, algo_list, map_strategy)
             # 상태에 따른 행동 선택
             next_state, reward, done, _, info = env.step(joint_action)
             reward = np.array(reward)
@@ -162,6 +133,10 @@ if __name__ == "__main__":
     parser.add_argument("--opponent", default="random", help="rl/random")
     parser.add_argument("--episode", default=20)
     parser.add_argument("--map", default="all", help="1/2/3/4/all")
+    parser.add_argument("--strategy", help="행동 전략")
+    parser.add_argument(
+        "--diff-strategy", help="맵별 행동 전략 다르게 설정", action="store_true"
+    )
     parser.add_argument("--gui", required=True, help="pygame gui 사용 여부")
     parser.add_argument("--repeat", default=0, help="반복 횟수 (무한=0)")
     args = parser.parse_args()
@@ -203,6 +178,8 @@ if __name__ == "__main__":
             episode=args.episode,
             shuffle_map=shuffle,
             map_num=args.map,
+            diff_strategy=args.diff_strategy,
+            strategy=args.strategy,
             render_gui=render_gui,
             verbose=False,
         )
