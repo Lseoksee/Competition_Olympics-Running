@@ -164,7 +164,7 @@ def main(args):
             state, _ = env.reset(
                 args.shuffle_map
             )  # [{'obs':[25,25], "control_player_index": 0}, {'obs':[25,25], "control_player_index": 1}]
-            if args.gui:
+            if args.gui == "true":
                 env.env_core.render()
             obs_ctrl_agent = np.array(
                 state[ctrl_agent_index]["obs"]
@@ -230,7 +230,7 @@ def main(args):
 
                 obs_oppo_agent = next_obs_oppo_agent
                 obs_ctrl_agent = np.array(next_obs_ctrl_agent).flatten()
-                if args.gui:
+                if args.gui == "true":
                     env.env_core.render()
                 Gt += reward[ctrl_agent_index] if done else -1
 
