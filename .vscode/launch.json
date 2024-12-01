@@ -12,9 +12,9 @@
             "args": [
                 "--my_ai", "rl",
                 "--opponent", "random",
-                "--episode", "100",
+                "--episode", "3",
                 "--map", "all",
-                "--gui", "true",
+                "--gui", "false",
                 "--repeat", "0",
                 "--diff-strategy"
             ],

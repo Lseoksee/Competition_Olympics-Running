@@ -45,6 +45,13 @@ def run_game(
     render_gui: bool,
     verbose=False,
 ):
+    """
+
+    Returns:
+        tuple[float, float]:
+            - [0]: rl 이긴 횟수
+            - [1]: 평균 step 수
+    """
     total_reward = np.zeros(2)
     num_win = np.zeros(3)  # agent 1 win, agent 2 win, draw
     total_steps = []  # 각 에피소드의 step 수 저장
@@ -119,6 +126,8 @@ def run_game(
     ]  # 평균 step 추가
     print(tabulate(data, headers=header, tablefmt="pretty"))
 
+    return int(num_win[1]), float(average_steps)
+
 
 if __name__ == "__main__":
     is_available_cuda = False
@@ -164,6 +173,12 @@ if __name__ == "__main__":
     print(now.center(40, "="))
     print()
 
+    # 최고 좋은 점수 저장
+    max_repeat = {
+        "repeat": 0,
+        "count": 0,
+        "avg": 0.0,
+    }
     repeat = int(args.repeat)
     i = 1
     while True:
@@ -172,7 +187,7 @@ if __name__ == "__main__":
             break
         Log(f"{i}번째 시도")
         print()
-        run_game(
+        conut, avg = run_game(
             game,
             algo_list=agent_list,
             episode=args.episode,
@@ -183,5 +198,19 @@ if __name__ == "__main__":
             render_gui=render_gui,
             verbose=False,
         )
+
+        #  최고 기록 구하기 (승리 횟수가 가장 많고 같을 경우 평균 step이 작은 것을 선택)
+        if conut >= max_repeat["count"]:
+            if not max_repeat["avg"] or avg < max_repeat["avg"]:
+                max_repeat["repeat"] = i
+                max_repeat["count"] = conut
+                max_repeat["avg"] = avg
+
+        print(
+            "현재 최고기록: {}번째 시도, 승리 횟수: {}, 평균step: {}".format(
+                max_repeat["repeat"], max_repeat["count"], max_repeat["avg"]
+            )
+        )
+
         print()
         i += 1
