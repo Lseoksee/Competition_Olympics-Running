@@ -28,8 +28,13 @@ parser.add_argument("--game_name", default="olympics-running", type=str)
 parser.add_argument("--algo", default="ppo", type=str, help="ppo/sac")
 parser.add_argument("--max_episodes", default=1500, type=int)
 parser.add_argument("--episode_length", default=500, type=int)
+
+# 특정맵만 max_episodes 만큼 학습할 때는 맵 번호
+# 모든 맵을 max_episodes 만큼 순회하여 학습할 때는 all
 parser.add_argument("--map", required=True, help="1/2/3/4/all")
 parser.add_argument("--shuffle_map", action="store_true")
+
+# 학습 여부
 parser.add_argument("--train", action="store_true")
 
 parser.add_argument("--seed", default=1, type=int)
@@ -41,6 +46,7 @@ parser.add_argument("--load_model", action="store_true")  # 加是true；不加�
 parser.add_argument("--load_run", default=2, type=int)
 parser.add_argument("--load_episode", default=900, type=int)
 
+#GUI 사용 여부
 parser.add_argument("--gui", required=True, help="pygame gui 사용 여부")
 
 device = "cuda" if torch.cuda.is_available() and DEVICE == "cuda" else "cpu"

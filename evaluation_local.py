@@ -15,7 +15,7 @@ from env.olympics_running import OlympicsRunning
 from utils.utills import Log
 
 
-def get_join_actions(state, algo_list, strategy_list: dict[int, list[int]]):
+def get_join_actions(state, algo_list, strategy_list: list):
     joint_actions = []
 
     for agent_idx in range(len(algo_list)):
