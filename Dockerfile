@@ -42,4 +42,7 @@ source ~/miniconda3/etc/profile.d/conda.sh && \
 conda activate competition_cuda
 
 # 컨테이너 시작시 start.sh 파일 실행
-CMD ["/bin/bash", "start.sh"]
+CMD git pull; \
+source ~/miniconda3/etc/profile.d/conda.sh \
+conda activate competition_cuda \
+python evaluation_local.py $python_args
