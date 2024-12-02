@@ -45,35 +45,46 @@ docker service logs -f competition_run
 
 #### 옵션 설명
 
--   `--my_ai rl`: `rl` 고정 (필수)
--   `--opponent random`: `random`으로 고정
--   `--episode <에피소드 수>`: 실제 대회 진행 시 `100` 으로
--   `--load_model <모델 체크포인트 파일>`:
+-   `--my_ai rl`:
+
+    -   `rl` 고정
+
+-   `--opponent random`
+
+    -   `random` 고정
+
+-   `--episode <에피소드 수>`
+
+    -   실제 대회 진행 시 `100` 으로
+
+-   `--load_model <모델 체크포인트 파일>`
 
     -   `./agents/rl` 폴더 기준임
     -   기본 모델로 진행시: `actor_1500.pth`
 
--   `--gui <true|false>`: pygame GUI 사용 여부
+-   `--gui <true|false>`
 
--   **(optional)** `--map <원하는 맵|all>`:
+    -   pygame GUI 사용 여부
+
+-   `--strategy <전략>`
+
+    -   agent 에 행동 전략 선택
+    -   `전략`: constants.py 에 _STRATEGY_ 상수에 정의 되있는 Key값
+    -   **`--diff-strategy` 옵션 사용 시 사용 하지 말것!**
+
+-   `--diff-strategy`
+
+    -   constants.py 에 _MAP_STRATEGY_ 상수에 정의된 맵 별 agent 행동 전략을 사용
+    -   **`--strategy ` 옵션 사용 시 사용 하지 말것!**
+
+-   `--map <원하는 맵|all>` _(optional)_
 
     > default: all
 
     -   1~11 중 선택, 랜덤하게 하려면 해당 옵션을 쓰지 말거나, `all`로
     -   대회 진행시 `all` 로
 
--   **(optional)** `--strategy <전략>`
-
-    -   agent 에 행동 전략 선택
-    -   `전략`: constants.py 에 _STRATEGY_ 상수에 정의 되있는 Key값
-    -   **`--diff-strategy` 옵션 사용 시 사용 하지 말것!**
-
--   **(optional)** `--diff-strategy`
-
-    -   constants.py 에 _MAP_STRATEGY_ 상수에 정의된 맵 별 agent 행동 전략을 사용
-    -   **`--strategy ` 옵션 사용 시 사용 하지 말것!**
-
--   **(optional)** `--repeat <반복 횟수>`:
+-   `--repeat <반복 횟수>` _(optional)_
 
     > default: 0
 
@@ -102,39 +113,39 @@ docker service logs -f competition_run
 
 ### 옵션 설명
 
--   `--map <원하는 맵|all>`:
+-   `--map <원하는 맵|all>`
 
     -   학습할 맵
     -   모든 맵을 `max_episodes` 만큼 순회하여 학습하고 싶다면 `all` 로
 
--   `--gui <true|false>`: pygame GUI 사용 여부
+-   `--gui <true|false>`
 
--   **(optional)** `--train`:
+    -   pygame GUI 사용 여부
+
+-   `--train` _(optional)_
 
     -   학습 사용 선언
     -   만약 단순히 모델 테스트만 하고 싶은 경우 해당 옵션을 쓸 필요 없음
 
--   **(optional)** `--max_episodes <최대 에피소드 수>`:
+-   `--max_episodes <최대 에피소드 수>` _(optional)_
 
     > default: 1500
 
     -   한 맵당 학습할 에피소드 수
 
--   **(optional)** `--load_model`:
+-   `--load_model` _(optional)_
 
     -   모델 체크포인트 불러오기 허용 선언
     -   **해당 옵션을 사용하면 반드시 `--actor_path`와 `--actor_path` 옵션도 추가 해야한다**
 
--   **(optional)** `--actor_path <actor 체크포인트 경로>`:
+-   `--actor_path <actor 체크포인트 경로>` _(optional)_
 
     -   `actor` 모델 체크포인트 불러오기 (`--load_model` 옵션과 함깨 사용)
-
     -   `./rl_trainer/models/olympics-running` 폴더 기준임
 
--   **(optional)** `--critic_path <actor 체크포인트 경로>`:
+-   `--critic_path <actor 체크포인트 경로>` _(optional)_
 
     -   `critic` 모델 체크포인트 불러오기 (`--load_model` 옵션과 함깨 사용)
-
     -   `./rl_trainer/models/olympics-running` 폴더 기준임
 
 ## 참고
