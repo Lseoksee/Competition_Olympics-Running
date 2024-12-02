@@ -2,7 +2,7 @@ import re
 import numpy as np
 import torch
 import random
-from agents.rl.submission import agent as rl_agent
+from agents.rl.submission import RLAgent
 from constants import DEVICE, MAP_STRATEGY, STRATEGY
 from env.chooseenv import make
 from tabulate import tabulate
@@ -15,7 +15,20 @@ from env.olympics_running import OlympicsRunning
 from utils.utills import Log
 
 
-def get_join_actions(state, algo_list, strategy_list: list):
+# 모델 로드 하기
+def loadModel(load_model: str):
+    agent = RLAgent(25 * 25, 36, 1)
+    path = os.path.join(os.getcwd(), "agents", "rl", load_model)
+
+    if not (os.path.exists(path)):
+        raise Exception(f"{load_model} 모델 파일이 존재하지 않습니다.")
+
+    agent.load_model(path)
+    print(f"모델 체크포인트 로드: {path}")
+    return agent
+
+
+def get_join_actions(state, algo_list, strategy_list: list, agent: RLAgent):
     joint_actions = []
 
     for agent_idx in range(len(algo_list)):
@@ -27,7 +40,7 @@ def get_join_actions(state, algo_list, strategy_list: list):
         elif algo_list[agent_idx] == "rl":
             # INFO: 이게 아마 환경 데이터
             obs = state[agent_idx]["obs"].flatten()
-            actions_raw = int(rl_agent.choose_action(obs))
+            actions_raw = int(agent.choose_action(obs))
             actions = strategy_list[actions_raw]
             joint_actions.append([[actions[0]], [actions[1]]])
 
@@ -43,6 +56,7 @@ def run_game(
     strategy: str,
     diff_strategy: bool,
     render_gui: bool,
+    agent: RLAgent,
     verbose=False,
 ):
     """
@@ -79,7 +93,7 @@ def run_game(
 
         while True:
             # 메 스탭 지날때 마다 환경에서 상태 정보 갱신
-            joint_action = get_join_actions(state, algo_list, map_strategy)
+            joint_action = get_join_actions(state, algo_list, map_strategy, agent)  # type: ignore
             # 상태에 따른 행동 선택
             next_state, reward, done, _, info = env.step(joint_action)
             reward = np.array(reward)
@@ -143,6 +157,7 @@ if __name__ == "__main__":
     parser.add_argument("--my_ai", default="rl", help="rl/random")
     parser.add_argument("--opponent", default="random", help="rl/random")
     parser.add_argument("--episode", default=20)
+    parser.add_argument("--load_model", required=True)
     parser.add_argument("--map", default="all", help="1/2/3/4/all")
 
     # INFO: constants.py 파일에 정의되어 있음
@@ -163,6 +178,9 @@ if __name__ == "__main__":
 
     env_type = "olympics-running"
     game = make(env_type, conf=None, seed=1)
+
+    # 모델 로드
+    agent = loadModel(args.load_model)
 
     if args.map != "all":
         game.specify_a_map(int(args.map))
@@ -202,6 +220,7 @@ if __name__ == "__main__":
             diff_strategy=args.diff_strategy,
             strategy=args.strategy,
             render_gui=render_gui,
+            agent=agent,
             verbose=False,
         )
 

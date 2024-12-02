@@ -8,7 +8,6 @@ import numpy as np
 
 from constants import DEVICE
 
-
 class Actor(nn.Module):
     def __init__(self, state_space, action_space, hidden_size=64, cnn=False):
         super(Actor, self).__init__()
@@ -65,13 +64,8 @@ class RLAgent(object):
     def load_model(self, filename):
         self.actor.load_state_dict(torch.load(filename))
 
-
-agent = RLAgent(25 * 25, 36, 1)
-actor_net = os.path.dirname(os.path.abspath(__file__)) + "/actor_1500.pth"
-agent.load_model(actor_net)
-
 #INFO: 이건 사용 안됨
-def my_controller(observation_list, action_space_list, is_act_continuous):
+def my_controller(agent: RLAgent, observation_list, action_space_list, is_act_continuous):
     obs_dim = 25 * 25
     obs = observation_list["obs"].copy().flatten()
     actions_raw = agent.choose_action(obs)

@@ -98,11 +98,6 @@ actions_map = {
 
 
 def main(args):
-    print("algo: ", args.algo)
-    print(f"device: {device}")
-    print(f"model episode: {args.model_episode}")
-    print(f"save interval: {args.save_interval}")
-
     env = make(args.game_name)
 
     num_agents = env.n_player

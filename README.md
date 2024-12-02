@@ -1,146 +1,104 @@
-### Update 21.Jan.2022
-Adding map11 to the pool
-<p align="center"> 
-<img src=https://github.com/jidiai/Competition_Olympics-Running/blob/main/assets/map11.png width=200>
-</p>
+# Competition_Olympics-Running
 
+-   기계학습 프로그래밍 경진 대회
 
+## 실행
 
-### Update 06.Jan.2022 (*Happy New Year!*)
-Adding 1 new map to the pool (map10)
-<p align="center"> 
-<img src=https://github.com/jidiai/Competition_Olympics-Running/blob/main/assets/map10.png width=200>
-</p>
+### Docker-Compose 사용
 
-### Update 22.Dec, 2021
-specify loaded path.
+```bash
+docker buildx build --load -t competition . && docker compose -p competition up -d
+```
 
-Make sure you add you current location (~/Competition_Olympics-Running) to PYTHONPATH variable.
+### 로컬에서 직접 테스트
 
-**Windows**: `set PYTHONPATH=%PYTHONPATH%;xxx`
+> Linux 환경에서는 `start.sh` 실행하면 됨
 
-**Linux/macOS**: `export PYTHONPATH=$PYTHONPATH:xxx`
+```bash
+python evaluation_local.py --my_ai rl --opponent random --episode=100 --map=all --gui false --repeat 0 --diff-strategy --load_model actor_1500.pth [...추가 옵션]
+```
 
-where `xxx` is your current path (~/Competition_Olympics-Running)
+#### 옵션 설명
 
+-   `--my_ai rl`: `rl` 고정 (필수)
+-   `--opponent random`: `random`으로 고정
+-   `--episode <에피소드 수>`: 실제 대회 진행 시 `100` 으로
+-   `--load_model <모델 체크포인트 파일>`:
 
-### Update 21.Dec.
-Adding 1 new map to the pool (map9)
+    -   `./agents/rl` 폴더 기준임
+    -   기본 모델로 진행시: `actor_1500.pth`
 
-<p align="center"> 
-<img src=https://github.com/jidiai/Competition_Olympics-Running/blob/main/assets/map9.png width=200>
-</p>
-  
-### Update 14.Dec.
-Adding numerical error threshold.
+-   `--gui <true|false>`: pygame GUI 사용 여부
 
-### Update 07.Dec.
-Adding 2 new maps to the pool (map7&8);
-<p align="center"> 
-  <img src=https://github.com/jidiai/Competition_Olympics-Running/blob/main/assets/map7.png width=200> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <img src=https://github.com/jidiai/Competition_Olympics-Running/blob/main/assets/map8.png width=200>
-</p>
+-   **(optional)** `--map <원하는 맵|all>`:
 
-### Update 24.Nov.
-fix the penetration bugs between two arcs, avoid numerical error when colliding with points...
+    > default: all
 
-### Update 23.Nov.
-Adding 2 new maps to the pool (map5&6).
+    -   1~11 중 선택, 랜덤하게 하려면 해당 옵션을 쓰지 말거나, `all`로
+    -   대회 진행시 `all` 로
 
-<p align="center"> 
-  <img src=https://github.com/jidiai/Competition_Olympics-Running/blob/main/assets/map5.png width=200> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  <img src=https://github.com/jidiai/Competition_Olympics-Running/blob/main/assets/map6.png width=200>
-</p>
+-   **(optional)** `--strategy <전략>`
 
+    -   agent 에 행동 전략 선택
+    -   `전략`: constants.py 에 _STRATEGY_ 상수에 정의 되있는 Key값
+    -   **`--diff-strategy` 옵션 사용 시 사용 하지 말것!**
 
+-   **(optional)** `--diff-strategy`
 
----
-# Competition_1v1running
+    -   constants.py 에 _MAP_STRATEGY_ 상수에 정의된 맵 별 agent 행동 전략을 사용
+    -   **`--strategy ` 옵션 사용 시 사용 하지 말것!**
 
-## Environment
+-   **(optional)** `--repeat <반복 횟수>`:
 
-<img src=https://github.com/jidiai/Competition_Olympics-Running/blob/main/assets/olympics%20running.gif width=600>
+    > default: 0
 
-check details in Jidi Competition [RLChina2021智能体竞赛](http://www.jidiai.cn/compete_detail?compete=12)
+    -   게임 진행 횟수, 무한반복=0
 
+## 모델 학습
 
-### “奥林匹克 跑步运动”:
+> Linux 환경에서는 `start_train.sh` 실행하면 됨
 
-<b>标签：</b>不完全观测；连续动作空间；连续状态空间
+```bash
+python rl_trainer/main.py --map all --gui false --train --max_episodes 1500
+```
 
-<b>环境简介：</b>智能体参加奥林匹克运动会。在这个系列的竞赛中，
-两个智能体参加跑步竞赛，目标是尽快到达终点。
+### 옵션 설명
 
-<b>环境规则:</b> 
-1. 在一个随机地图中，对战双方各控制一个有相同质量和半径的弹性小球智能体；
-2. 智能体可以互相碰撞，也可以碰撞墙壁，但会损失一定的速度；
-3. 智能体自身有能量，每步消耗的能量与施加的驱动力和位移成正比；
-4. 智能体能量以固定速率恢复，如果能量衰减到零，则不能加力；
-5. 智能体的观测为自身朝向前方25*25的矩形区域，观测值包括墙壁、终点线、对手和跑道方向辅助箭头；
-6. 初始时智能体位于所在地图的起跑线位置，初始朝向与跑道方向平行；
-7. 当有一个智能体到达终点（红线）或环境达到最大步数500步时环境结束，先冲过终点的一方获胜，若双方均未过线则平局；
-8. 智能体需要具有一定的泛化性以适应不同的地图，评测时会从所有地图（每次热身赛和正赛评测时可能加入新地图）中随机选择一个作为评测地图。
+-   `--map <원하는 맵|all>`:
 
-<b>动作空间：</b>连续；两维。分别代表施加力量和转向角度。
+    -   학습할 맵
+    -   모든 맵을 `max_episodes` 만큼 순회하여 학습하고 싶다면 `all` 로
 
-<b>观测：</b>每一步环境返回一个25x25的二维矩阵，详情请见*/olympics*文件夹
+-   **(optional)** `--train`:
 
-<b>奖励函数:</b> 如果没到达终点，不得分；如果到达终点，获得100分。
+    -   학습 사용 선언
+    -   만약 단순히 모델 테스트만 하고 싶은 경우 해당 옵션을 쓸 필요 없음
 
-<b>环境终止条件:</b> 有一个智能体到达终点，则环境结束；或者，环境达到最大步数500步。
+-   **(optional)** `--max_episodes <최대 에피소드 수>`:
 
-<b>评测说明：</b>该环境属于零和游戏，在金榜的积分按照ELO进行匹配算法进行计算并排名。零和游戏在匹配对手或队友时，按照瑞士轮进行匹配。
-平台验证和评测时，在单核CPU上运行用户代码（暂不支持GPU），限制用户每一步返回动作的时间不超过1s，内存不超过500M。
+    > default: 1500
 
-<b>报名方式：</b>访问“及第”平台（ www.jidiai.cn ），在“擂台”页面选择“RLChina 智能体挑战赛 - 辛丑年冬赛季”即可报名参赛。RLCN 微信公众号后台回复“智能体竞赛”，可进入竞赛讨论群。
+    -   한 맵당 학습할 에피소드 수
 
-This is a POMDP simulated environment of 2D sports games where althletes are spheres and have continuous action space (torque and steering). The observation is a 25*25 array of agent's limited view range. We introduce collision and agent's fatigue such that no torque applies when running out of energy.
+-   **(optional)** `--load_model`:
 
-This is for now a beta version and we intend to add more sports scenario, stay tuned :)
+    -   모델 체크포인트 불러오기 허용 선언
+    -   **해당 옵션을 사용하면 반드시 `--actor_path`와 `--actor_path` 옵션도 추가 해야한다**
 
----
-## Dependency
+-   **(optional)** `--actor_path <actor 체크포인트 경로>`:
 
->conda create -n olympics python=3.8.5
+    -   `actor` 모델 체크포인트 불러오기 (`--load_model` 옵션과 함깨 사용)
 
->conda activate olympics
+    -   `./rl_trainer/models/olympics-running` 폴더 기준임
 
->pip install -r requirements.txt
+-   **(optional)** `--critic_path <actor 체크포인트 경로>`:
 
----
+    -   `critic` 모델 체크포인트 불러오기 (`--load_model` 옵션과 함깨 사용)
 
-## Run a game
+    -   `./rl_trainer/models/olympics-running` 폴더 기준임
 
->python olympics/main.py
+## 참고
 
----
+### CUDA 사용 여부 설정
 
-## Train a baseline agent 
-
->python rl_trainer/main.py
-
-By default parameters, the total reward of training is shown below.
-
-<img src=https://github.com/jidiai/Competition_Olympics-Running/blob/main/assets/PPO%20map1%20training%20(run1).png>
-
-You can also locally evaluate your trained model by executing:
-
->python evaluation_local.py --my_ai rl --opponent random --episode=50 --map=all
-
-or specifying the map number (--map=1).
-
-<img src="https://github.com/jidiai/Competition_Olympics-Running/blob/main/assets/evaluation_local_results.png">
-
-
-## How to test submission
-
-You can locally test your submission. At Jidi platform, we evaluate your submission as same as *run_log.py*
-
-For example,
-
->python run_log.py --my_ai "rl" --opponent "random"
-
-in which you are controlling agent 1 which is green.
-
-## Ready to submit
-
-1. Random policy --> *agents/random/submission.py*
-2. RL policy --> *all files in agents/rl*
+- `constants.py` 에서 *DEVICE* 상수 값을 `"CUDA"` 또는 `"CPU"` 로 설정

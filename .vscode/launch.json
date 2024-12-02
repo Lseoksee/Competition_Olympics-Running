@@ -16,6 +16,7 @@
                 "--map", "all",
                 "--gui", "true",
                 "--repeat", "0",
+                "--load_model", "actor_1500.pth",
                 "--diff-strategy"
             ],
             "console": "integratedTerminal"
