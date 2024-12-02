@@ -1,0 +1,70 @@
+services:
+    strategy-default:
+        container_name: st-default
+        #gpu 사용
+        deploy:
+            resources:
+                reservations:
+                    devices:
+                        - driver: nvidia
+                          count: all
+                          capabilities: [gpu]
+        environment:
+            - python_args=--my_ai rl --opponent random --episode=100 --map=all --gui false --repeat 0 --strategy default --load_model actor_1500.pth
+        image: competition
+
+    strategy-diffmap:
+        container_name: st-diffmap
+        #gpu 사용
+        deploy:
+            resources:
+                reservations:
+                    devices:
+                        - driver: nvidia
+                          count: all
+                          capabilities: [gpu]
+        environment:
+            - python_args=--my_ai rl --opponent random --episode=100 --map=all --gui false --repeat 0 --diff-strategy --load_model actor_1500.pth
+        image: competition
+
+    strategy-1:
+        container_name: strategy-1
+        #gpu 사용
+        deploy:
+            resources:
+                reservations:
+                    devices:
+                        - driver: nvidia
+                          count: all
+                          capabilities: [gpu]
+        environment:
+            - python_args=--my_ai rl --opponent random --episode=100 --map=all --gui false --repeat 0 --strategy strategy1 --load_model actor_1500.pth
+        image: competition
+
+    strategy-2:
+        container_name: strategy-2
+        #gpu 사용
+        deploy:
+            resources:
+                reservations:
+                    devices:
+                        - driver: nvidia
+                          count: all
+                          capabilities: [gpu]
+        environment:
+            - python_args=--my_ai rl --opponent random --episode=100 --map=all --gui false --repeat 0 --strategy strategy2 --load_model actor_1500.pth
+        image: competition
+
+    strategy-3:
+        container_name: strategy-3
+        #gpu 사용
+        deploy:
+            resources:
+                reservations:
+                    devices:
+                        - driver: nvidia
+                          count: all
+                          capabilities: [gpu]
+        environment:
+            - python_args=--my_ai rl --opponent random --episode=100 --map=all --gui false --repeat 0 --strategy strategy3 --load_model actor_1500.pth
+        image: competition
