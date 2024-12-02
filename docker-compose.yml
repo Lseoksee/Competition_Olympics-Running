@@ -3,7 +3,8 @@ services:
         deploy:
             restart_policy:
                 condition: none
-            replicas: 5
+            # 시스템 상황에 따라 조정할 것
+            replicas: 8
         environment:
             # docker swarm에서 gpu 사용을 위한 환경 변수 
             - NVIDIA_VISIBLE_DEVICES=ALL
