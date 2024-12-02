@@ -1,7 +1,7 @@
 #!/bin/bash
 git pull
 
-source ~/miniconda3/etc/profile.d/conda.sh
+source /miniconda3/etc/profile.d/conda.sh
 conda activate competition_cuda
 
 if [ -z "$python_args" ]; then
