@@ -69,6 +69,8 @@ python rl_trainer/main.py --map all --gui false --train --max_episodes 1500
     -   학습할 맵
     -   모든 맵을 `max_episodes` 만큼 순회하여 학습하고 싶다면 `all` 로
 
+-   `--gui <true|false>`: pygame GUI 사용 여부
+
 -   **(optional)** `--train`:
 
     -   학습 사용 선언
@@ -101,4 +103,4 @@ python rl_trainer/main.py --map all --gui false --train --max_episodes 1500
 
 ### CUDA 사용 여부 설정
 
-- `constants.py` 에서 *DEVICE* 상수 값을 `"CUDA"` 또는 `"CPU"` 로 설정
+-   `constants.py` 에서 _DEVICE_ 상수 값을 `"CUDA"` 또는 `"CPU"` 로 설정
