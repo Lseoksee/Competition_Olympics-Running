@@ -1,4 +1,3 @@
-import re
 import numpy as np
 import torch
 import random
@@ -177,7 +176,13 @@ if __name__ == "__main__":
         print("디바이스: CPU")
 
     env_type = "olympics-running"
-    game = make(env_type, conf=None, seed=1)
+
+    seed = torch.randint(0, 99999999, (1,)).item()
+    print(f"seed: {seed}")
+    
+    game = make(env_type, conf=None, seed=int(seed))
+    # 기존 코드에는seed 를 1 로 설정했는데 바꿔도 문제 없는지 물어봐야함
+    # game = make(env_type, conf=None, seed=1)
 
     # 모델 로드
     agent = loadModel(args.load_model)
