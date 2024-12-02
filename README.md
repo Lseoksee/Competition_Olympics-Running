@@ -12,11 +12,24 @@ docker buildx build --load -t competition . && docker compose -p competition up 
 
 ### 로컬에서 직접 테스트
 
-> Linux 환경에서는 `start.sh` 실행하면 됨
+1. **Conda 가상환경 생성**
 
-```bash
-python evaluation_local.py --my_ai rl --opponent random --episode=100 --map=all --gui false --repeat 0 --diff-strategy --load_model actor_1500.pth [...추가 옵션]
-```
+    ```bash
+    conda env create -f environment.yml
+    conda activate competition_cuda
+
+    # 만약 CUDA 없으면
+    conda env create -f environment_NonCuda.yml
+    conda activate competition_noncuda
+    ```
+
+2. **실행**
+
+    > Linux 환경에서는 `start.sh` 실행하면 됨
+
+    ```bash
+    python evaluation_local.py --my_ai rl --opponent random --episode 100 --map all --gui false --repeat 0 --diff-strategy --load_model actor_1500.pth [...추가 옵션]
+    ```
 
 #### 옵션 설명
 
@@ -56,11 +69,24 @@ python evaluation_local.py --my_ai rl --opponent random --episode=100 --map=all 
 
 ## 모델 학습
 
-> Linux 환경에서는 `start_train.sh` 실행하면 됨
+1. **Conda 가상환경 생성**
 
-```bash
-python rl_trainer/main.py --map all --gui false --train --max_episodes 1500
-```
+    ```bash
+    conda env create -f environment.yml
+    conda activate competition_cuda
+
+    # 만약 CUDA 없으면
+    conda env create -f environment_NonCuda.yml
+    conda activate competition_noncuda
+    ```
+
+2. **실행**
+
+    > Linux 환경에서는 `start_train.sh` 실행하면 됨
+
+    ```bash
+    python rl_trainer/main.py --map all --gui false --train --max_episodes 1500
+    ```
 
 ### 옵션 설명
 
