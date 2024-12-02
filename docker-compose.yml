@@ -8,5 +8,5 @@ services:
         environment:
             # docker swarm에서 gpu 사용을 위한 환경 변수 
             - NVIDIA_VISIBLE_DEVICES=ALL
-            - python_args=--my_ai rl --opponent random --episode=100 --map=all --gui false --repeat 0 --strategy default --load_model actor_1500.pth
+            - python_args=--my_ai rl --opponent random --episode=100 --map=all --gui false --repeat 0 --diff-strategy --load_model actor_1500.pth
         image: competition
