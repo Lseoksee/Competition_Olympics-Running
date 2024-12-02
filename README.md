@@ -6,8 +6,17 @@
 
 ### Docker-Compose 사용
 
+> Docker swarm이 활성화 되야 함
+
 ```bash
-docker buildx build --load -t competition . && docker compose -p competition up -d
+# 이미지 빌드
+docker buildx build --load -t competition .
+
+# 서비스 시작
+docker stack deploy -d -c docker-compose.yml competition
+
+# 서비스 로그보기
+docker service logs -f competition_run
 ```
 
 ### 로컬에서 직접 테스트
@@ -130,3 +139,41 @@ docker buildx build --load -t competition . && docker compose -p competition up 
 ### CUDA 사용 여부 설정
 
 -   `constants.py` 에서 _DEVICE_ 상수 값을 `"CUDA"` 또는 `"CPU"` 로 설정
+
+### Docker-Swarm 에서 GPU 사용하는법
+
+1. GPU GUID 확인
+
+    ```bash
+    nvidia-smi -a | grep UUID
+    # GPU-XXXXX
+    ```
+
+2. `/etc/docker/daemon.json` 파일 수정
+
+    > 없으면 만듬
+
+    ```json
+    {
+        "runtimes": {
+            "nvidia": {
+                "path": "/usr/bin/nvidia-container-runtime",
+                "runtimeArgs": []
+            }
+        },
+        "default-runtime": "nvidia",
+        "node-generic-resources": ["NVIDIA-GPU=<위에서 확인한 GUID"]
+    }
+    ```
+
+3. `/etc/nvidia-container-runtime/config.toml`에 아래 구문 추가
+
+    ```toml
+    swarm-resource = "DOCKER_RESOURCE_GPU"
+    ```
+
+4. docker 재시작
+
+    ```bash
+    sudo systemctl restart docker
+    ```
