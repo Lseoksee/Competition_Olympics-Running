@@ -10,7 +10,10 @@
 
 ```bash
 # 이미지 빌드
-docker buildx build --load -t competition .
+docker buildx build --load -t competition . && \
+    docker buildx prune -f --all && \
+    docker rm -f buildx_buildkit_multi-arch-builder0 && \
+    docker rmi moby/buildkit:buildx-stable-1
 
 # 서비스 시작
 docker stack deploy -d -c docker-compose.yml competition
