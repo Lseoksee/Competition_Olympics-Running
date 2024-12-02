@@ -15,7 +15,7 @@ WORKDIR "/root/Competition_Olympics-Running"
 
 # conda 가상환경 만들고 활성화
 RUN conda env create -f environment.yml && \
-source ~/miniconda3/etc/profile.d/conda.sh && \
+source /miniconda3/etc/profile.d/conda.sh && \
 conda activate competition_cuda
 
 # python docker logs 출력대응
