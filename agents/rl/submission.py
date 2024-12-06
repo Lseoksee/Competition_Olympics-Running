@@ -62,7 +62,7 @@ class RLAgent(object):
         return action.item()
 
     def load_model(self, filename):
-        self.actor.load_state_dict(torch.load(filename))
+        self.actor.load_state_dict(torch.load(filename, map_location=self.device))
 
 #INFO: 이건 사용 안됨
 def my_controller(agent: RLAgent, observation_list, action_space_list, is_act_continuous):
