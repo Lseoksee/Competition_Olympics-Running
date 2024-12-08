@@ -22,6 +22,16 @@ docker stack deploy -d -c docker-compose.yml competition
 docker service logs -f competition_run
 ```
 
+#### 컨테이너 로그 저장하기
+
+```bash
+# 실행 권한 주기
+chmod +x log.sh
+
+# ./log 폴더에 로그 파일 저장
+./log.sh
+```
+
 ### 로컬에서 직접 테스트
 
 1. **Conda 가상환경 생성**
