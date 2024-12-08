@@ -2,7 +2,7 @@ import numpy as np
 import torch
 import random
 from agents.rl.submission import RLAgent
-from constants import DEVICE, MAP_STRATEGY, STRATEGY
+from constants import DEVICE, MAP_MODEL, MAP_STRATEGY, STRATEGY
 from env.chooseenv import make
 from tabulate import tabulate
 import argparse
@@ -11,6 +11,7 @@ import os
 from datetime import datetime
 
 from env.olympics_running import OlympicsRunning
+from olympics import agent
 from utils.utills import Log
 
 
@@ -23,7 +24,6 @@ def loadModel(load_model: str):
         raise Exception(f"{load_model} 모델 파일이 존재하지 않습니다.")
 
     agent.load_model(path)
-    print(f"모델 체크포인트 로드: {path}")
     return agent
 
 
@@ -55,7 +55,6 @@ def run_game(
     strategy: str,
     diff_strategy: bool,
     render_gui: bool,
-    agent: RLAgent,
     verbose=False,
 ):
     """
@@ -74,11 +73,16 @@ def run_game(
         episode_reward = np.zeros(2)
 
         state, map_index = env.reset(shuffle_map)
+        
+        # 모델 로드
+        # 맵별로 다른 모델을 사용하므로 constants.py 파일 참고
+        model_name = MAP_MODEL[map_index] # type: ignore
+        agent = loadModel(model_name)
 
         if strategy:
             map_strategy = STRATEGY[strategy]
         elif diff_strategy:
-            Log(f"{map_index}번 맵전략: {MAP_STRATEGY[map_index]}")  # type: ignore
+            Log(f"{map_index}번 맵전략: {MAP_STRATEGY[map_index]}, 사용된 모델: {model_name}")  # type: ignore
             map_strategy = STRATEGY[MAP_STRATEGY[map_index]]  # type: ignore
         else:
             raise Exception(
@@ -156,7 +160,6 @@ if __name__ == "__main__":
     parser.add_argument("--my_ai", default="rl", help="rl/random")
     parser.add_argument("--opponent", default="random", help="rl/random")
     parser.add_argument("--episode", default=20)
-    parser.add_argument("--load_model", required=True)
     parser.add_argument("--map", default="all", help="1/2/3/4/all")
 
     # INFO: constants.py 파일에 정의되어 있음
@@ -183,9 +186,6 @@ if __name__ == "__main__":
     game = make(env_type, conf=None, seed=int(seed))
     # 기존 코드에는seed 를 1 로 설정했는데 바꿔도 문제 없는지 물어봐야함
     # game = make(env_type, conf=None, seed=1)
-
-    # 모델 로드
-    agent = loadModel(args.load_model)
 
     if args.map != "all":
         game.specify_a_map(int(args.map))
@@ -225,7 +225,6 @@ if __name__ == "__main__":
             diff_strategy=args.diff_strategy,
             strategy=args.strategy,
             render_gui=render_gui,
-            agent=agent,
             verbose=False,
         )
 

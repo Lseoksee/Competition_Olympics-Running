@@ -162,7 +162,7 @@ MAP_STRATEGY = {
     3: "default",
     4: "default",
     5: "strategy3",
-    6: "default",
+    6: "strategy3",
     7: "default",
     8: "strategy3",
     9: "strategy2",
@@ -170,3 +170,19 @@ MAP_STRATEGY = {
     11: "strategy1",
 }
 """맵별 전략"""
+
+
+MAP_MODEL = {
+    1: "actor_1500.pth",
+    2: "actor_1500.pth",
+    3: "actor_map-3_ep-1500.pth",
+    4: "actor_1500.pth",
+    5: "actor_map-5_ep-1500.pth",
+    6: "actor_1500.pth",
+    7: "actor_1500.pth",
+    8: "actor_1500.pth",
+    9: "actor_1500.pth",
+    10: "actor_map-10_ep-1500.pth",
+    11: "actor_1500.pth",
+}
+"""맵별 모델 (기본값: actor_1500.pth)"""
