@@ -57,11 +57,6 @@ docker service logs -f competition_run
 
     -   실제 대회 진행 시 `100` 으로
 
--   `--load_model <모델 체크포인트 파일>`
-
-    -   `./agents/rl` 폴더 기준임
-    -   기본 모델로 진행시: `actor_1500.pth`
-
 -   `--gui <true|false>`
 
     -   pygame GUI 사용 여부
