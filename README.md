@@ -50,7 +50,7 @@ chmod +x log.sh
     > Linux 환경에서는 `start.sh` 실행하면 됨
 
     ```bash
-    python evaluation_local.py --my_ai rl --opponent random --episode 100 --map all --gui false --repeat 0 --diff-strategy --load_model actor_1500.pth [...추가 옵션]
+    python evaluation_local.py --my_ai rl --opponent random --episode 100 --map all --gui false --repeat 0 --diff-strategy
     ```
 
 #### 옵션 설명
